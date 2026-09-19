@@ -6,7 +6,7 @@
     <a href="#-english-version">🇬🇧 English Version</a> | <a href="#-versión-en-español">🇲🇽 Versión en Español</a>
   </p>
 
-  <a href="TU_URL_AQUI">
+  <a href="[(https://agritech-decision-engine.streamlit.app/)">
     <img src="https://img.shields.io/badge/Streamlit-Digital_Twin_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live App" />
   </a>
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3" />
