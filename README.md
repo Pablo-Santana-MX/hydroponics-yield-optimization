@@ -66,10 +66,13 @@ Understanding the biological drop is not enough. An Optimization Engine (*Heuris
 ---
 
 ## 📊 Deployment (Interactive Digital Twin)
-The entire analytical pipeline was packaged into a rich interface application (`Streamlit` injected with *Theme-Aware Glassmorphism CSS*), allowing non-technical stakeholders to interactively operate the mathematical optimization model in real time.
+The entire analytical pipeline was packaged into a rich interface application (`Streamlit` injected with *Theme-Aware Glassmorphism CSS*). It is divided into two main operational tabs:
+
+*   **Tab 1 - Operational Simulator:** Allows non-technical stakeholders to input current greenhouse sensor data and instantly evaluate plant health through reactive visual indicators, receiving precise actuator commands (e.g., "Adjust pH to 6.0").
+*   **Tab 2 - Executive Dashboard (Real-Time Audit):** Recreates the mathematical validation of the model. The "Biological Threshold" scatter plot is fully interactive. As the user modifies the simulation parameters in the sidebar, a dynamic star marker (🌟) navigates through the historical data landscape. **This star represents the exact real-time projection of the current state, due to the modification of the simulation parameters**, allowing the stakeholder to visually audit how far their current crop state deviates from the absolute mathematical optimum.
 
 <div align="center">
-  <img src="reports/figures/executive_dashboard_light.png" width="900" alt="Streamlit App Interface" />
+  <img src="reports/figures/streamlit_dashboard_final.png" width="900" alt="Streamlit App Interface" />
   <br><br>
   <a href="https://agritech-decision-engine.streamlit.app/">
     <img src="https://img.shields.io/badge/🚀_LAUNCH_LIVE_APP-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Open Live App" />
@@ -143,10 +146,13 @@ Conocer la caída biológica no es suficiente. Se construyó un Motor de Optimiz
 ---
 
 ## 📊 Despliegue (Gemelo Digital Interactivo)
-Todo el pipeline analítico se empaquetó en una aplicación de interfaz rica (`Streamlit` con inyección de *Glassmorphism CSS Theme-Aware*), permitiendo a *stakeholders* sin perfil técnico operar el modelo matemático de optimización de forma interactiva en tiempo real.
+Todo el pipeline analítico se empaquetó en una aplicación de interfaz rica (`Streamlit` con inyección de *Glassmorphism CSS Theme-Aware*). Se divide en dos pestañas principales:
+
+*   **Pestaña 1 - Simulador Operativo:** Permite a *stakeholders* sin perfil técnico ingresar datos del invernadero y evaluar instantáneamente la salud absoluta del cultivo a través de indicadores visuales reactivos, recibiendo comandos de actuación precisos (ej. "Ajustar pH a 6.0").
+*   **Pestaña 2 - Executive Dashboard (Auditoría en Tiempo Real):** Recrea la validación matemática del modelo. El gráfico de dispersión del "Umbral Biológico" es completamente interactivo. Conforme el usuario modifica los parámetros de simulación en la barra lateral, un marcador dinámico en forma de estrella (🌟) navega por el panorama de datos históricos. **Esta estrella representa la proyección exacta en tiempo real del estado actual, debido a la modificación de los parámetros de simulación**, permitiendo al usuario auditar visualmente qué tan lejos se encuentra su cultivo del óptimo matemático global.
 
 <div align="center">
-  <img src="reports/figures/executive_dashboard_light.png" width="900" alt="Interfaz de la App en Streamlit" />
+  <img src="reports/figures/streamlit_dashboard_final.png" width="900" alt="Interfaz de la App en Streamlit" />
   <br><br>
   <a href="https://agritech-decision-engine.streamlit.app/">
     <img src="https://img.shields.io/badge/🚀_ABRIR_APP_EN_VIVO-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Abrir App" />
