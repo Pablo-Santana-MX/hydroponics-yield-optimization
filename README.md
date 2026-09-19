@@ -6,7 +6,7 @@
     <a href="#-english-version">🇬🇧 English Version</a> | <a href="#-versión-en-español">🇲🇽 Versión en Español</a>
   </p>
 
-  <a href="[(https://agritech-decision-engine.streamlit.app/)">
+  <a href="https://agritech-decision-engine.streamlit.app/">
     <img src="https://img.shields.io/badge/Streamlit-Digital_Twin_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live App" />
   </a>
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3" />
@@ -50,20 +50,11 @@ Prior to any modeling, 4,900 telemetry records were audited to evaluate data qua
 Given the parabolic nature of biological processes, the baseline Linear Regression model failed due to underfitting, with an **R² of only 0.0019** and a massive error of **100.3g (RMSE)**. This justified the evolution to a non-linear ensemble algorithm: `Random Forest Regressor`.
 
 <div align="center">
-  <img src="reports/figures/executive_dashboard_light.png" width="800" alt="Executive Dashboard" />
-</div>
-<br>
-
-> **Fig 3. Modeling Validation:** The Random Forest Ensemble successfully captured the biological complexity, dominating the productive variance with an **accuracy of 94.5% (R²)** and reducing the error to **23.51g (RMSE)**. The biological threshold graph (center-left) visually proves the optimal growth zone and the non-linear drop, validating the predictive superiority of the model.
-
-To prevent the "black box" problem in ensemble models, Game Theory was applied using Shapley values (*SHapley Additive exPlanations*):
-
-<div align="center">
   <img src="reports/figures/shap_summary.png" width="800" alt="SHAP Values" />
 </div>
 <br>
 
-> **Fig 4. Explainable Artificial Intelligence (SHAP):** While Gini impurity only indicates *what* variable matters, SHAP reveals the *directionality* of the causal impact. The summary confirms that high temperatures (red dots on the left) heavily penalize yield, whereas maintaining electroconductivity (Nutrients) and pH in precise thresholds (right clustering) are the main drivers to maximize the harvest.
+> **Fig 3. Explainable Artificial Intelligence (SHAP):** While Gini impurity only indicates *what* variable matters, SHAP reveals the *directionality* of the causal impact. The summary confirms that high temperatures (red dots on the left) heavily penalize yield, whereas maintaining electroconductivity (Nutrients) and pH in precise thresholds (right clustering) are the main drivers to maximize the harvest.
 
 ---
 
@@ -76,6 +67,15 @@ Understanding the biological drop is not enough. An Optimization Engine (*Heuris
 
 ## 📊 Deployment (Interactive Digital Twin)
 The entire analytical pipeline was packaged into a rich interface application (`Streamlit` injected with *Theme-Aware Glassmorphism CSS*), allowing non-technical stakeholders to interactively operate the mathematical optimization model in real time.
+
+<div align="center">
+  <img src="reports/figures/executive_dashboard_light.png" width="900" alt="Streamlit App Interface" />
+  <br><br>
+  <a href="https://agritech-decision-engine.streamlit.app/">
+    <img src="https://img.shields.io/badge/🚀_LAUNCH_LIVE_APP-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Open Live App" />
+  </a>
+</div>
+<br>
 
 ## 🚀 Reproducibility
 To audit the research in a local environment and run the source code:
@@ -127,20 +127,11 @@ Antes de cualquier modelado, se auditaron 4,900 registros telemétricos para eva
 Dada la naturaleza parabólica de los procesos biológicos, el modelo base de Regresión Lineal falló por subajuste (*Underfitting*), con un **R² de apenas 0.0019** y un error masivo de **100.3g (RMSE)**. Esto justificó la evolución a un ensamble no lineal: `Random Forest Regressor`.
 
 <div align="center">
-  <img src="reports/figures/executive_dashboard_light.png" width="800" alt="Executive Dashboard" />
-</div>
-<br>
-
-> **Fig 3. Validación de Modelado:** El Ensamble Random Forest logró capturar la complejidad biológica, dominando la varianza productiva con una **precisión del 94.5% (R²)** y reduciendo el error a **23.51g (RMSE)**. El gráfico de umbral biológico (centro-izquierda) comprueba visualmente la zona óptima de crecimiento y la caída no lineal, validando la superioridad predictiva del modelo.
-
-Para evitar el problema de la "caja negra" en modelos de ensamble, se aplicó la Teoría de Juegos mediante valores de Shapley (*SHapley Additive exPlanations*):
-
-<div align="center">
   <img src="reports/figures/shap_summary.png" width="800" alt="SHAP Values" />
 </div>
 <br>
 
-> **Fig 4. Inteligencia Artificial Explicable (SHAP):** Mientras que la impureza de Gini solo indica *qué* variable importa, SHAP revela la *direccionalidad* del impacto causal. El resumen confirma que temperaturas altas (puntos rojos a la izquierda) penalizan fuertemente el rendimiento, mientras que mantener la electroconductividad (Nutrientes) y el pH en umbrales precisos (clustering derecho) son los motores principales para maximizar la cosecha.
+> **Fig 3. Inteligencia Artificial Explicable (SHAP):** Mientras que la impureza de Gini solo indica *qué* variable importa, SHAP revela la *direccionalidad* del impacto causal. El resumen confirma que temperaturas altas (puntos rojos a la izquierda) penalizan fuertemente el rendimiento, mientras que mantener la electroconductividad (Nutrientes) y el pH en umbrales precisos (clustering derecho) son los motores principales para maximizar la cosecha.
 
 ---
 
@@ -153,6 +144,15 @@ Conocer la caída biológica no es suficiente. Se construyó un Motor de Optimiz
 
 ## 📊 Despliegue (Gemelo Digital Interactivo)
 Todo el pipeline analítico se empaquetó en una aplicación de interfaz rica (`Streamlit` con inyección de *Glassmorphism CSS Theme-Aware*), permitiendo a *stakeholders* sin perfil técnico operar el modelo matemático de optimización de forma interactiva en tiempo real.
+
+<div align="center">
+  <img src="reports/figures/executive_dashboard_light.png" width="900" alt="Interfaz de la App en Streamlit" />
+  <br><br>
+  <a href="https://agritech-decision-engine.streamlit.app/">
+    <img src="https://img.shields.io/badge/🚀_ABRIR_APP_EN_VIVO-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Abrir App" />
+  </a>
+</div>
+<br>
 
 ## 🚀 Reproducibilidad del Experimento
 Para auditar la investigación en un entorno local y ejecutar el código fuente:
