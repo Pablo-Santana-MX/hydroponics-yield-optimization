@@ -408,7 +408,8 @@ with tab2:
         ax_dash1.tick_params(colors='#2b2d42'); ax_dash1.grid(color=mpl_grid_color, linestyle='--', alpha=0.5)
         
         legend_dash = ax_dash1.legend(loc='lower left', frameon=True)
-        legend_dash.get_frame().set_facecolor('rgba(255,255,255,0.7)')
+        # CORRECCIÓN DE LA LEYENDA AQUÍ
+        legend_dash.get_frame().set_facecolor((1.0, 1.0, 1.0, 0.7))
         
         st.pyplot(fig_dash1)
 
