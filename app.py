@@ -292,7 +292,7 @@ with tab1:
     
     legend = ax.legend(frameon=True, loc='lower center', bbox_to_anchor=(0.5, -0.3), ncol=2)
     
-    st.pyplot(fig, theme="streamlit")
+    st.pyplot(fig)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"#### {t['neon_title']}")
@@ -380,7 +380,7 @@ with tab2:
         ax_dash1.scatter(current_ph_state, baseline_yield, color=WARNING, s=400, edgecolor='white', linewidth=2, marker='*', zorder=10, label='Current State')
         
         ax_dash1.spines[['top', 'right']].set_visible(False)
-        st.pyplot(fig_dash1, theme="streamlit")
+        st.pyplot(fig_dash1)
 
     with dash_col_right:
         st.markdown(f"<h5 style='text-align: center;'>{t['dash_c2_title']}</h5>", unsafe_allow_html=True)
@@ -396,7 +396,7 @@ with tab2:
         ax_dash2.barh(df_imp['Feature'], df_imp['Importance'], color=colors, height=0.6, alpha=0.8)
         
         ax_dash2.spines[['top', 'right', 'left', 'bottom']].set_visible(False)
-        st.pyplot(fig_dash2, theme="streamlit")
+        st.pyplot(fig_dash2)
         
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"<h5 style='text-align: center;'>{t['dash_c3_title']}</h5>", unsafe_allow_html=True)
@@ -411,4 +411,4 @@ with tab2:
         ax_dash3.plot([50, 400], [50, 400], color=OPTIMAL, linestyle='--', linewidth=2)
         
         ax_dash3.spines[['top', 'right']].set_visible(False)
-        st.pyplot(fig_dash3, theme="streamlit")
+        st.pyplot(fig_dash3)
