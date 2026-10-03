@@ -2,8 +2,8 @@
 
   <p><sub><b>S-LABS · ADVANCED DATA SOLUTIONS</b> &nbsp;|&nbsp; Data Science & Decision Intelligence</sub></p>
 
-  <h1>🥬 Agritech Decision Intelligence Engine</h1>
-  <p><i>From raw sensor data to a prescribed action and its dollar value.</i></p>
+  <h1>Agritech Decision Intelligence Engine</h1>
+  <p><i>From raw sensor data to a prescribed action and its dollar value.🥬</i></p>
 
   <p>
     <a href="#-english-version">🇬🇧 English Version</a> &nbsp;|&nbsp; <a href="#-versión-en-español">🇲🇽 Versión en Español</a>
