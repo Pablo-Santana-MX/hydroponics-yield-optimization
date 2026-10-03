@@ -15,12 +15,12 @@ st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap');
     
-    /* Tipografía corporativa adaptativa (sin forzar fondos) */
+    /* Tipografía corporativa adaptativa */
     h1, h2, h3, h4, h5, h6 { font-family: 'Sora', sans-serif !important; font-weight: 700 !important; }
     p, span, label, div { font-family: 'Source Sans 3', sans-serif; }
     
-    /* Ocultar elementos por defecto de Streamlit */
-    #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}
+    /* Restauramos el header para que vuelva a aparecer el menú de settings de Streamlit */
+    #MainMenu {visibility: visible;} footer {visibility: hidden;} 
     
     /* Tarjetas adaptables al tema (Light/Dark Mode) */
     .metric-card {
@@ -55,10 +55,9 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- PALETA DE COLORES ACCESIBLE (Okabe-Ito para Daltonismo) ---
-# Evitamos el clásico verde/rojo. Usamos tonos con alto contraste luminiscente.
-OPTIMAL = "#009E73"  # Verde Azulado (Seguro para daltónicos)
+OPTIMAL = "#009E73"  # Verde Azulado
 WARNING = "#E69F00"  # Naranja
-CRITICAL = "#D55E00" # Vermellón (Rojo-Naranja de alto contraste)
+CRITICAL = "#D55E00" # Vermellón (Rojo-Naranja)
 BRAND = "#0072B2"    # Azul corporativo
 
 # --- 2. SESSION STATE MANAGEMENT & REPRODUCIBILITY SCENARIOS ---
@@ -75,17 +74,17 @@ def load_stress_scenario():
     st.session_state['ph'] = 4.8
     st.session_state['ec'] = 2.8
 
-# --- 3. BILINGUAL DICTIONARY ---
+# --- 3. BILINGUAL DICTIONARY (DICCIONARIO REPARADO) ---
 lang_option = st.sidebar.radio("🌐 Platform Language", ["ES", "EN"], horizontal=True)
 
 t = {
     "ES": {
         "title": "Motor de Inteligencia de Decisiones Agritech",
         "subtitle": "**Objetivo Operativo:** Ajuste dinámico de parámetros para mitigación de estrés ambiental.",
-        "btn_stress": "🚨 Simular Escenario de Estrés",
-        "btn_reset": "Restablecer Telemetría",
-        "sidebar_env": "Variables No Controlables (Clima)",
-        "sidebar_levers": "Actuadores Controlables (Riego)",
+        "btn_stress": "🚨 Simular Escenario Crítico",
+        "btn_reset": "🔄 Restablecer Telemetría",
+        "sidebar_env": "🌡️ Incontrolables (Clima)",
+        "sidebar_levers": "🧪 Controlables (Riego)",
         "kpi1": "Rendimiento Proyectado",
         "kpi2": "Máximo Absoluto",
         "kpi3": "% Incremento (ROI)",
@@ -106,14 +105,22 @@ t = {
         "curr_lbl": "Telemetría Actual",
         "tab_sim": "Simulador Operativo",
         "tab_dash": "Dashboard Ejecutivo (Validación)",
+        "dash_title": "S-Labs | Validación del Modelo Analítico",
+        "dash_kpi1": "Precisión del Modelo (R²)",
+        "dash_kpi2": "Umbral Promedio pH",
+        "dash_kpi3": "Proyección Máxima",
+        "dash_c1_title": "Impacto No Lineal (Varianza de pH vs Rendimiento)",
+        "dash_c2_title": "Importancia de Variables (Random Forest)",
+        "dash_c3_title": "Validación: Predicción vs Realidad",
+        "dash_info": "Este panel consolida la validación matemática del algoritmo. Modifique los actuadores en la barra lateral para observar la reubicación de la simulación operativa dentro de la topología global de datos."
     },
     "EN": {
         "title": "Agritech Decision Intelligence Engine",
         "subtitle": "**Operational Objective:** Dynamic parameter adjustment for environmental stress mitigation.",
         "btn_stress": "🚨 Load Critical Stress Scenario",
-        "btn_reset": "Reset Telemetry",
-        "sidebar_env": "Non-Controllable Variables",
-        "sidebar_levers": "Controllable Actuators (Irrigation)",
+        "btn_reset": "🔄 Reset Telemetry",
+        "sidebar_env": "🌡️ Non-Controllable Variables",
+        "sidebar_levers": "🧪 Controllable Actuators",
         "kpi1": "Projected Yield",
         "kpi2": "Absolute Maximum",
         "kpi3": "% Increase (ROI)",
@@ -134,6 +141,14 @@ t = {
         "curr_lbl": "Current Telemetry",
         "tab_sim": "Operational Simulator",
         "tab_dash": "Executive Dashboard (Validation)",
+        "dash_title": "S-Labs | Analytical Model Validation",
+        "dash_kpi1": "Model Accuracy (R²)",
+        "dash_kpi2": "Average pH Threshold",
+        "dash_kpi3": "Maximum Projection",
+        "dash_c1_title": "Non-Linear Impact (pH Variance vs Yield)",
+        "dash_c2_title": "Feature Importance (Random Forest)",
+        "dash_c3_title": "Validation: Predicted vs Actual",
+        "dash_info": "This dashboard consolidates the mathematical validation of the algorithm. Adjust the sidebar actuators to observe the relocation of the current operational simulation within the global data topology."
     }
 }[lang_option]
 
@@ -175,19 +190,19 @@ def load_model():
 rf_model = load_model()
 
 # --- 6. SIDEBAR CONTROLS ---
-# Botones nativos de Streamlit para asegurar alto contraste automático en ambos temas
+# Botón de Demostración visible arriba
 st.sidebar.button(t["btn_stress"], on_click=load_stress_scenario, use_container_width=True, type="primary")
-st.sidebar.markdown("<br>", unsafe_allow_html=True)
+st.sidebar.markdown("<hr style='margin: 10px 0;'>", unsafe_allow_html=True)
 
 st.sidebar.markdown(f"**{t['sidebar_env']}**")
-current_temp = st.sidebar.slider("Temperature (°C)" if lang_option=="EN" else "Temperatura (°C)", 10.0, 40.0, key='temp', step=0.5)
-current_hum = st.sidebar.slider("Humidity (%)" if lang_option=="EN" else "Humedad (%)", 40.0, 90.0, key='hum', step=1.0)
+current_temp = st.sidebar.slider(t["chart_temp"].replace("Curva de Impacto ", "").replace("Curve", ""), 10.0, 40.0, key='temp', step=0.5)
+current_hum = st.sidebar.slider("Humedad (%)" if lang_option=="ES" else "Humidity (%)", 40.0, 90.0, key='hum', step=1.0)
 current_light, current_days = 14.0, 45
 
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 st.sidebar.markdown(f"**{t['sidebar_levers']}**")
-current_ph = st.sidebar.slider("pH Level" if lang_option=="EN" else "Nivel de pH", 4.0, 9.0, key='ph', step=0.1)
-current_ec = st.sidebar.slider("Nutrient EC (mS)" if lang_option=="EN" else "EC Nutrientes (mS)", 0.5, 3.0, key='ec', step=0.1)
+current_ph = st.sidebar.slider("Nivel de pH" if lang_option=="ES" else "pH Level", 4.0, 9.0, key='ph', step=0.1)
+current_ec = st.sidebar.slider("EC (mS)" if lang_option=="ES" else "Nutrient EC (mS)", 0.5, 3.0, key='ec', step=0.1)
 
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 st.sidebar.button(t["btn_reset"], on_click=reset_params, use_container_width=True, type="secondary")
@@ -225,7 +240,7 @@ with tab1:
     ABSOLUTE_MAX_YIELD = 400.0
     health_ratio = baseline_yield / ABSOLUTE_MAX_YIELD
 
-    # Lógica de Estado con redundancia (Color + Icono) para daltonismo
+    # Lógica de Estado con redundancia (Color + Icono) para accesibilidad
     if baseline_yield < 200: 
         status, p_color, icon = t["status_critical"], CRITICAL, "❌"
     elif baseline_yield < 350: 
@@ -241,15 +256,15 @@ with tab1:
         
         m1, m2, m3 = st.columns(3)
         m1.metric(t["kpi1"], f"{baseline_yield:.1f} g", f"{max_yield - baseline_yield:.1f} {t['delta']}")
-        m2.metric(t["kpi2"], f"{max_yield:.1f} g", "Optimized Engine" if lang_option=="EN" else "Motor Optimizado")
+        m2.metric(t["kpi2"], f"{max_yield:.1f} g", "Optimized" if lang_option=="EN" else "Optimizado")
         roi_pct = ((max_yield - baseline_yield) / max(1, baseline_yield)) * 100
-        m3.metric(t["kpi3"], f"+{roi_pct:.1f}%", "Impacto Directo" if lang_option=="ES" else "Direct Impact")
+        m3.metric(t["kpi3"], f"+{roi_pct:.1f}%", "Impacto" if lang_option=="ES" else "Impact")
 
     with col_plant:
         st.markdown(f"""
-        <div class="status-card" style="border-color: {p_color};">
+        <div class="status-card" style="border-top: 6px solid {p_color};">
             <h1 style="color: {p_color} !important; font-size: 2.8rem; margin:0;">{icon} {int(health_ratio*100)}%</h1>
-            <p style="font-weight: 600; margin-top: 5px; text-transform: uppercase; font-size: 0.8rem;">{status}</p>
+            <p style="font-weight: 600; margin-top: 5px; text-transform: uppercase; font-size: 0.8rem; color: #888;">{status}</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -262,7 +277,7 @@ with tab1:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"#### {t['chart_title']}")
     
-    # Gráficos con colores neutros y de alto contraste para funcionar en modo Claro y Oscuro
+    # Gráficos usando el Theme nativo de Streamlit para adaptarse a Claro/Oscuro
     fig, ax = plt.subplots(figsize=(14, 4))
     fig.patch.set_alpha(0.0); ax.patch.set_alpha(0.0)
 
@@ -273,18 +288,11 @@ with tab1:
     ax.axvline(optimal_row['pH_Level'], color=OPTIMAL, linestyle='--', linewidth=2.5, label=f"✅ {t['opt_lbl']}: {optimal_row['pH_Level']:.1f}")
     ax.scatter(st.session_state['ph'], baseline_yield, color=CRITICAL, s=150, zorder=5, label=f"📍 {t['curr_lbl']}: pH {st.session_state['ph']:.1f}")
 
-    # Ejes en gris neutro para contraste universal
-    ax.spines[['top', 'right', 'left']].set_visible(False)
-    ax.spines['bottom'].set_color('#888888')
-    ax.tick_params(colors='#888888', bottom=False, left=False) 
-    ax.xaxis.label.set_color('#888888'); ax.yaxis.label.set_color('#888888')
+    ax.spines[['top', 'right']].set_visible(False)
     
     legend = ax.legend(frameon=True, loc='lower center', bbox_to_anchor=(0.5, -0.3), ncol=2)
-    legend.get_frame().set_facecolor('white') # Fondo blanco explícito solo para la leyenda
-    for text in legend.get_texts(): text.set_color('#333333')
     
-    ax.grid(axis='y', color='#888888', linestyle='-', alpha=0.2)
-    st.pyplot(fig)
+    st.pyplot(fig, theme="streamlit")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"#### {t['neon_title']}")
@@ -307,7 +315,6 @@ with tab1:
         
         try: 
             y_val = df_temp.loc[np.isclose(df_temp[feature_name], current_val, atol=1e-5), 'Sim_Yield'].values[0]
-            # Usar marcador diferente según el estado para daltónicos
             marker_shape = 'o' if is_optimal else 'X'
             ax2.scatter(current_val, y_val, color=color_theme, s=120, marker=marker_shape, zorder=5)
             ax2.vlines(current_val, ymin=ax2.get_ylim()[0], ymax=y_val, color=color_theme, linestyle=':', lw=2)
@@ -329,9 +336,9 @@ with tab1:
     
     col_n1, col_n2 = st.columns(2)
     with col_n1: 
-        st.markdown(f'<div class="tech-card" style="border-left: 5px solid {color_temp};"><img src="data:image/png;base64,{generate_base64_plot("Temperature_C", np.arange(10, 41, 1), st.session_state["temp"], 18, 25, t["chart_temp"], color_temp, is_temp_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="tech-card" style="border-top: 4px solid {color_temp};"><img src="data:image/png;base64,{generate_base64_plot("Temperature_C", np.arange(10, 41, 1), st.session_state["temp"], 18, 25, t["chart_temp"], color_temp, is_temp_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
     with col_n2: 
-        st.markdown(f'<div class="tech-card" style="border-left: 5px solid {color_ec};"><img src="data:image/png;base64,{generate_base64_plot("Nutrient_EC_mS", np.arange(0.5, 3.1, 0.1), np.round(st.session_state["ec"],1), 1.2, 1.8, t["chart_ec"], color_ec, is_ec_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="tech-card" style="border-top: 4px solid {color_ec};"><img src="data:image/png;base64,{generate_base64_plot("Nutrient_EC_mS", np.arange(0.5, 3.1, 0.1), np.round(st.session_state["ec"],1), 1.2, 1.8, t["chart_ec"], color_ec, is_ec_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
 
 with tab2:
     # --- 10. TAB 2: INTERACTIVE EXECUTIVE DASHBOARD ---
@@ -341,11 +348,11 @@ with tab2:
 
     kpi1, kpi2, kpi3 = st.columns(3)
     with kpi1:
-        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi1']}</p><h2 style="margin: 0; color: {BRAND}; font-weight: 700; font-family: 'Sora', sans-serif;">94.5%</h2></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; color: #888;">{t['dash_kpi1']}</p><h2 style="margin: 0; color: {BRAND}; font-weight: 700; font-family: 'Sora', sans-serif;">94.5%</h2></div>""", unsafe_allow_html=True)
     with kpi2:
-        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi2']}</p><h2 style="margin: 0; font-weight: 700; font-family: 'Sora', sans-serif;">6.0</h2></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; color: #888;">{t['dash_kpi2']}</p><h2 style="margin: 0; font-weight: 700; font-family: 'Sora', sans-serif;">6.0</h2></div>""", unsafe_allow_html=True)
     with kpi3:
-        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi3']}</p><h2 style="margin: 0; color: {OPTIMAL}; font-weight: 700; font-family: 'Sora', sans-serif;">404g</h2></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; color: #888;">{t['dash_kpi3']}</p><h2 style="margin: 0; color: {OPTIMAL}; font-weight: 700; font-family: 'Sora', sans-serif;">404g</h2></div>""", unsafe_allow_html=True)
         
     st.markdown("<br><br>", unsafe_allow_html=True)
     dash_col_left, dash_col_right = st.columns([3, 2])
@@ -372,18 +379,8 @@ with tab2:
         current_ph_state = st.session_state['ph']
         ax_dash1.scatter(current_ph_state, baseline_yield, color=WARNING, s=400, edgecolor='white', linewidth=2, marker='*', zorder=10, label='Current State')
         
-        ax_dash1.set_xlabel('Soil/Water pH Level', fontweight='600', color='#888888')
-        ax_dash1.set_ylabel('Crop Yield (grams)', fontweight='600', color='#888888')
-        ax_dash1.spines[['top', 'right', 'left']].set_visible(False)
-        ax_dash1.spines['bottom'].set_color('#888888')
-        ax_dash1.tick_params(colors='#888888', bottom=False, left=False)
-        ax_dash1.grid(axis='y', color='#888888', linestyle='-', alpha=0.2)
-        
-        legend_dash = ax_dash1.legend(loc='lower left', frameon=True)
-        legend_dash.get_frame().set_facecolor('white')
-        for text in legend_dash.get_texts(): text.set_color('#333333')
-        
-        st.pyplot(fig_dash1)
+        ax_dash1.spines[['top', 'right']].set_visible(False)
+        st.pyplot(fig_dash1, theme="streamlit")
 
     with dash_col_right:
         st.markdown(f"<h5 style='text-align: center;'>{t['dash_c2_title']}</h5>", unsafe_allow_html=True)
@@ -398,11 +395,8 @@ with tab2:
         colors = [BRAND if i >= len(df_imp)-2 else '#888888' for i in range(len(df_imp))]
         ax_dash2.barh(df_imp['Feature'], df_imp['Importance'], color=colors, height=0.6, alpha=0.8)
         
-        ax_dash2.set_xlabel('Gini Importance', fontweight='600', color='#888888')
         ax_dash2.spines[['top', 'right', 'left', 'bottom']].set_visible(False)
-        ax_dash2.tick_params(colors='#888888', bottom=False, left=False)
-        ax_dash2.grid(axis='x', color='#888888', linestyle='-', alpha=0.2)
-        st.pyplot(fig_dash2)
+        st.pyplot(fig_dash2, theme="streamlit")
         
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"<h5 style='text-align: center;'>{t['dash_c3_title']}</h5>", unsafe_allow_html=True)
@@ -416,10 +410,5 @@ with tab2:
         ax_dash3.scatter(actual, predicted, alpha=0.6, color=BRAND, s=20, edgecolors='none')
         ax_dash3.plot([50, 400], [50, 400], color=OPTIMAL, linestyle='--', linewidth=2)
         
-        ax_dash3.set_xlabel('Actual Yield (g)', fontweight='600', color='#888888')
-        ax_dash3.set_ylabel('Predicted Yield (g)', fontweight='600', color='#888888')
-        ax_dash3.spines[['top', 'right', 'left']].set_visible(False)
-        ax_dash3.spines['bottom'].set_color('#888888')
-        ax_dash3.tick_params(colors='#888888', bottom=False, left=False)
-        ax_dash3.grid(color='#888888', linestyle='-', alpha=0.2)
-        st.pyplot(fig_dash3)
+        ax_dash3.spines[['top', 'right']].set_visible(False)
+        st.pyplot(fig_dash3, theme="streamlit")
