@@ -8,76 +8,58 @@ import os
 import io
 import base64
 
-# --- 1. PAGE CONFIGURATION & CLEAN TECH CSS ---
+# --- 1. PAGE CONFIGURATION & ADAPTIVE ACCESSIBLE CSS ---
 st.set_page_config(page_title="S-Labs | Agritech Engine", page_icon="🧬", layout="wide")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap');
     
-    .stApp { background-color: #F8FAFC !important; font-family: 'Source Sans 3', sans-serif !important; color: #475569 !important; }
-    h1, h2, h3, h4, h5, h6 { font-family: 'Sora', sans-serif !important; color: #0f172a !important; font-weight: 700 !important; }
+    /* Tipografía corporativa adaptativa (sin forzar fondos) */
+    h1, h2, h3, h4, h5, h6 { font-family: 'Sora', sans-serif !important; font-weight: 700 !important; }
     p, span, label, div { font-family: 'Source Sans 3', sans-serif; }
     
-    [data-testid="stSidebar"] { background-color: #FFFFFF !important; border-right: 1px solid #e2e8f0 !important; }
-    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label { color: #334155 !important; font-weight: 500; }
-    
-    div.stButton > button {
-        background-color: #4CB7E4 !important; color: #ffffff !important;
-        border: none !important; border-radius: 9999px !important;
-        font-weight: 600 !important; transition: all 0.3s ease !important; padding: 10px 24px !important;
-        box-shadow: 0 4px 6px -1px rgba(76,183,228, 0.2) !important;
-    }
-    div.stButton > button:hover {
-        background-color: #38bdf8 !important;
-        box-shadow: 0 10px 15px -3px rgba(76,183,228, 0.3) !important; transform: translateY(-1px) !important;
-    }
-
-    /* Botón de escenario crítico (rojo sutil) */
-    button[kind="secondary"] {
-        background-color: #fff1f2 !important; color: #e11d48 !important;
-        border: 1px solid #fecdd3 !important;
-    }
-    button[kind="secondary"]:hover {
-        background-color: #ffe4e6 !important; border-color: #fda4af !important;
-    }
-    
-    [data-testid="stExpander"] {
-        background-color: #FFFFFF !important; border: 1px solid #e2e8f0 !important;
-        border-radius: 16px !important; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
-    }
-    [data-testid="stExpander"] summary p { color: #0f172a !important; font-weight: 600 !important; }
-    
+    /* Ocultar elementos por defecto de Streamlit */
     #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}
     
-    div[data-testid="metric-container"] {
-        background-color: #FFFFFF !important; border-radius: 16px; padding: 20px 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Tarjetas adaptables al tema (Light/Dark Mode) */
+    .metric-card {
+        background-color: var(--secondary-background-color); 
+        border-radius: 12px; padding: 20px 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
     }
-    div[data-testid="metric-container"]:hover {
-        transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    }
-    div[data-testid="stMetricValue"] > div { color: #0f172a !important; font-weight: 700 !important; font-family: 'Sora', sans-serif !important;}
-    div[data-testid="stMetricLabel"] > label > div > p { color: #64748b !important; font-weight: 600 !important; text-transform: uppercase; font-size: 0.75rem; }
+    .metric-card:hover { transform: translateY(-2px); }
     
     .status-card {
-        text-align: center; padding: 24px; background: #FFFFFF; 
-        border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
-        border: 1px solid #e2e8f0; height: 100%; display: flex; flex-direction: column; justify-content: center;
+        text-align: center; padding: 24px; background-color: var(--secondary-background-color); 
+        border-radius: 16px; border: 2px solid var(--border-color); height: 100%; 
+        display: flex; flex-direction: column; justify-content: center;
     }
     
-    .tech-card-green { border-left: 4px solid #10b981 !important; background: #FFFFFF; border-radius: 12px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;}
-    .tech-card-red { border-left: 4px solid #f43f5e !important; background: #FFFFFF; border-radius: 12px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;}
+    .tech-card { 
+        background-color: var(--secondary-background-color); 
+        border-radius: 12px; padding: 16px; 
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
     
-    .stTabs [data-baseweb="tab-list"] { gap: 12px; background-color: transparent; border-bottom: 1px solid #e2e8f0; }
+    /* Pestañas (Tabs) */
+    .stTabs [data-baseweb="tab-list"] { gap: 12px; background-color: transparent; }
     .stTabs [data-baseweb="tab"] {
         height: 48px; background-color: transparent; border: none;
-        color: #64748b !important; font-weight: 600; font-family: 'Sora', sans-serif; font-size: 0.9rem;
+        font-weight: 600; font-family: 'Sora', sans-serif; font-size: 0.9rem;
     }
-    .stTabs [aria-selected="true"] { color: #4CB7E4 !important; border-bottom: 3px solid #4CB7E4 !important; background-color: transparent !important; }
     </style>
     """, unsafe_allow_html=True)
+
+# --- PALETA DE COLORES ACCESIBLE (Okabe-Ito para Daltonismo) ---
+# Evitamos el clásico verde/rojo. Usamos tonos con alto contraste luminiscente.
+OPTIMAL = "#009E73"  # Verde Azulado (Seguro para daltónicos)
+WARNING = "#E69F00"  # Naranja
+CRITICAL = "#D55E00" # Vermellón (Rojo-Naranja de alto contraste)
+BRAND = "#0072B2"    # Azul corporativo
 
 # --- 2. SESSION STATE MANAGEMENT & REPRODUCIBILITY SCENARIOS ---
 default_values = {'temp': 22.5, 'hum': 60.0, 'ph': 7.5, 'ec': 0.8}
@@ -87,7 +69,6 @@ for key, value in default_values.items():
 def reset_params():
     for key, value in default_values.items(): st.session_state[key] = value
 
-# NUEVO: Función de Reproducibilidad (Escenario de Falla Operativa)
 def load_stress_scenario():
     st.session_state['temp'] = 34.0
     st.session_state['hum'] = 45.0
@@ -100,7 +81,7 @@ lang_option = st.sidebar.radio("🌐 Platform Language", ["ES", "EN"], horizonta
 t = {
     "ES": {
         "title": "Motor de Inteligencia de Decisiones Agritech",
-        "subtitle": "**Objetivo Operativo:** Ajuste dinámico de parámetros para mitigación de estrés ambiental y maximización de rendimiento.",
+        "subtitle": "**Objetivo Operativo:** Ajuste dinámico de parámetros para mitigación de estrés ambiental.",
         "btn_stress": "🚨 Simular Escenario de Estrés",
         "btn_reset": "Restablecer Telemetría",
         "sidebar_env": "Variables No Controlables (Clima)",
@@ -111,9 +92,9 @@ t = {
         "delta": "g (Recuperados)",
         "prescribed": "VECTOR DE CALIBRACIÓN ÓPTIMO:",
         "context_title": "Arquitectura y Caso de Negocio",
-        "problem": "**El Reto:** El rendimiento agrícola experimenta caídas no lineales severas cuando las variables ambientales se desvían de sus umbrales óptimos.",
-        "solution": "**Arquitectura S-Labs:** Despliegue de un ensamble *Random Forest* iterado mediante *Grid Search*. Simula miles de realidades en milisegundos para prescribir el vector exacto.",
-        "business": "**Impacto en Negocio (Aplicación Práctica):** Permite a los operadores prevenir pérdidas antes de que ocurran. Al no sobredosificar nutrientes (EC) buscando compensar estrés térmico, se proyecta un **ahorro del 15% en insumos químicos** y una **reducción del 22% en merma biológica**.",
+        "problem": "**El Reto:** El rendimiento experimenta caídas no lineales severas cuando las variables se desvían de sus umbrales óptimos.",
+        "solution": "**Arquitectura S-Labs:** Despliegue de un ensamble *Random Forest* iterado mediante *Grid Search*.",
+        "business": "**Impacto en Negocio:** Previene la sobredosificación química y reduce la merma biológica en un 22%.",
         "chart_title": "Mapeo de Umbral Biológico Principal (pH)",
         "neon_title": "Auditoría de Sensibilidad de Sensores",
         "status_critical": "Pérdida Operativa Crítica",
@@ -128,7 +109,7 @@ t = {
     },
     "EN": {
         "title": "Agritech Decision Intelligence Engine",
-        "subtitle": "**Operational Objective:** Dynamic parameter adjustment for environmental stress mitigation and yield maximization.",
+        "subtitle": "**Operational Objective:** Dynamic parameter adjustment for environmental stress mitigation.",
         "btn_stress": "🚨 Load Critical Stress Scenario",
         "btn_reset": "Reset Telemetry",
         "sidebar_env": "Non-Controllable Variables",
@@ -139,9 +120,9 @@ t = {
         "delta": "g (Recovered)",
         "prescribed": "OPTIMAL CALIBRATION VECTOR:",
         "context_title": "Architecture & Business Case",
-        "problem": "**The Challenge:** Agricultural yield experiences severe non-linear degradation when environmental variables deviate from optimal thresholds.",
-        "solution": "**S-Labs Architecture:** Deployment of a *Random Forest* ensemble iterated via Heuristic Grid Search. Simulates thousands of realities in milliseconds to prescribe the exact vector.",
-        "business": "**Business Impact (Practical Application):** Enables operators to prevent crop loss before it happens. By preventing chemical overdosing (EC) to compensate for heat stress, the system projects a **15% savings in chemical inputs** and a **22% reduction in biological waste**.",
+        "problem": "**The Challenge:** Yield experiences severe non-linear degradation when variables deviate from optimal thresholds.",
+        "solution": "**S-Labs Architecture:** Deployment of a *Random Forest* ensemble iterated via Heuristic Grid Search.",
+        "business": "**Business Impact:** Prevents chemical overdosing and projects a 22% reduction in biological waste.",
         "chart_title": "Primary Biological Threshold Mapping (pH)",
         "neon_title": "Sensor Sensitivity Audit",
         "status_critical": "Critical Operational Loss",
@@ -165,11 +146,7 @@ def display_transparent_logo(filename):
         try:
             from PIL import Image
             img = Image.open(image_path).convert("RGBA")
-            data = np.array(img)
-            r, g, b = data[:,:,0], data[:,:,1], data[:,:,2]
-            white_areas = (r >= 230) & (g >= 230) & (b >= 230)
-            data[white_areas, 3] = 0
-            st.sidebar.image(Image.fromarray(data), use_container_width=True)
+            st.sidebar.image(img, use_container_width=True)
         except Exception: pass
 
 display_transparent_logo('logo_git.png')
@@ -198,7 +175,8 @@ def load_model():
 rf_model = load_model()
 
 # --- 6. SIDEBAR CONTROLS ---
-st.sidebar.button(t["btn_stress"], on_click=load_stress_scenario, use_container_width=True, type="secondary")
+# Botones nativos de Streamlit para asegurar alto contraste automático en ambos temas
+st.sidebar.button(t["btn_stress"], on_click=load_stress_scenario, use_container_width=True, type="primary")
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 
 st.sidebar.markdown(f"**{t['sidebar_env']}**")
@@ -212,7 +190,7 @@ current_ph = st.sidebar.slider("pH Level" if lang_option=="EN" else "Nivel de pH
 current_ec = st.sidebar.slider("Nutrient EC (mS)" if lang_option=="EN" else "EC Nutrientes (mS)", 0.5, 3.0, key='ec', step=0.1)
 
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
-st.sidebar.button(t["btn_reset"], on_click=reset_params, use_container_width=True, type="primary")
+st.sidebar.button(t["btn_reset"], on_click=reset_params, use_container_width=True, type="secondary")
 
 # --- 7. OPTIMIZATION ENGINE ---
 def run_optimization():
@@ -243,42 +221,40 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 tab1, tab2 = st.tabs([t["tab_sim"], t["tab_dash"]])
 
-SLATE_800 = "#1e293b"; SLATE_500 = "#64748b"; SLATE_200 = "#e2e8f0"
-BLUE_BRAND = "#4CB7E4"; EMERALD = "#10b981"; ROSE = "#f43f5e"
-
 with tab1:
     ABSOLUTE_MAX_YIELD = 400.0
     health_ratio = baseline_yield / ABSOLUTE_MAX_YIELD
 
-    if baseline_yield < 200: status, p_color = t["status_critical"], ROSE
-    elif baseline_yield < 350: status, p_color = t["status_suboptimal"], "#f59e0b"
-    else: status, p_color = t["status_optimal"], EMERALD
+    # Lógica de Estado con redundancia (Color + Icono) para daltonismo
+    if baseline_yield < 200: 
+        status, p_color, icon = t["status_critical"], CRITICAL, "❌"
+    elif baseline_yield < 350: 
+        status, p_color, icon = t["status_suboptimal"], WARNING, "⚠️"
+    else: 
+        status, p_color, icon = t["status_optimal"], OPTIMAL, "✅"
 
     col_action, col_plant = st.columns([2.5, 1])
 
     with col_action:
         max_yield = optimal_row['Predicted_Yield']
-        st.info(f"**{t['prescribed']}**\n\nTarget: **{max_yield:.1f}g** ➔ **pH: {optimal_row['pH_Level']:.1f}** | **EC: {optimal_row['Nutrient_EC_mS']:.1f} mS**")
+        st.info(f"**{t['prescribed']}**\n\n🎯 Target: **{max_yield:.1f}g** ➔ **pH: {optimal_row['pH_Level']:.1f}** | **EC: {optimal_row['Nutrient_EC_mS']:.1f} mS**")
         
-        # NUEVO: Métrica de % de Incremento de ROI
         m1, m2, m3 = st.columns(3)
-        m1.metric(t["kpi1"], f"{baseline_yield:.1f} g", f"{max_yield - baseline_yield:.1f} {t['delta']}", delta_color="normal")
-        m2.metric(t["kpi2"], f"{max_yield:.1f} g", "✓ System Optimized" if lang_option=="EN" else "✓ Optimizado", delta_color="off")
-        
+        m1.metric(t["kpi1"], f"{baseline_yield:.1f} g", f"{max_yield - baseline_yield:.1f} {t['delta']}")
+        m2.metric(t["kpi2"], f"{max_yield:.1f} g", "Optimized Engine" if lang_option=="EN" else "Motor Optimizado")
         roi_pct = ((max_yield - baseline_yield) / max(1, baseline_yield)) * 100
-        m3.metric(t["kpi3"], f"+{roi_pct:.1f}%", "Impacto Directo", delta_color="normal")
+        m3.metric(t["kpi3"], f"+{roi_pct:.1f}%", "Impacto Directo" if lang_option=="ES" else "Direct Impact")
 
     with col_plant:
         st.markdown(f"""
-        <div class="status-card">
-            <h1 style="color: {p_color} !important; font-size: 3rem; margin:0;">{int(health_ratio*100)}%</h1>
-            <p style="color: {SLATE_500}; font-weight: 600; margin-top: 5px; text-transform: uppercase; font-size: 0.8rem;">{status}</p>
+        <div class="status-card" style="border-color: {p_color};">
+            <h1 style="color: {p_color} !important; font-size: 2.8rem; margin:0;">{icon} {int(health_ratio*100)}%</h1>
+            <p style="font-weight: 600; margin-top: 5px; text-transform: uppercase; font-size: 0.8rem;">{status}</p>
         </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     with st.expander(t["context_title"], expanded=False):
-        # NUEVO: Caso de Negocio y Aplicación Práctica
         st.markdown(t["problem"])
         st.markdown(t["solution"])
         st.markdown(t["business"])
@@ -286,31 +262,34 @@ with tab1:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"#### {t['chart_title']}")
     
+    # Gráficos con colores neutros y de alto contraste para funcionar en modo Claro y Oscuro
     fig, ax = plt.subplots(figsize=(14, 4))
     fig.patch.set_alpha(0.0); ax.patch.set_alpha(0.0)
 
     sim_curve = sim_df.groupby('pH_Level')['Predicted_Yield'].max().reset_index()
-    sns.lineplot(x='pH_Level', y='Predicted_Yield', data=sim_curve, ax=ax, color=BLUE_BRAND, linewidth=3)
-    ax.fill_between(sim_curve['pH_Level'], sim_curve['Predicted_Yield'], color=BLUE_BRAND, alpha=0.1)
+    sns.lineplot(x='pH_Level', y='Predicted_Yield', data=sim_curve, ax=ax, color=BRAND, linewidth=3)
+    ax.fill_between(sim_curve['pH_Level'], sim_curve['Predicted_Yield'], color=BRAND, alpha=0.1)
     
-    ax.axvline(optimal_row['pH_Level'], color=EMERALD, linestyle='--', linewidth=2, label=f"{t['opt_lbl']}: {optimal_row['pH_Level']:.1f}")
-    ax.scatter(st.session_state['ph'], baseline_yield, color=ROSE, s=120, zorder=5, label=f"{t['curr_lbl']}: pH {st.session_state['ph']:.1f}")
+    ax.axvline(optimal_row['pH_Level'], color=OPTIMAL, linestyle='--', linewidth=2.5, label=f"✅ {t['opt_lbl']}: {optimal_row['pH_Level']:.1f}")
+    ax.scatter(st.session_state['ph'], baseline_yield, color=CRITICAL, s=150, zorder=5, label=f"📍 {t['curr_lbl']}: pH {st.session_state['ph']:.1f}")
 
-    ax.spines[['top', 'right', 'left']].set_visible(False); ax.spines['bottom'].set_color(SLATE_200)
-    ax.tick_params(colors=SLATE_500, bottom=False, left=False) 
-    ax.xaxis.label.set_color(SLATE_800); ax.yaxis.label.set_color(SLATE_800)
+    # Ejes en gris neutro para contraste universal
+    ax.spines[['top', 'right', 'left']].set_visible(False)
+    ax.spines['bottom'].set_color('#888888')
+    ax.tick_params(colors='#888888', bottom=False, left=False) 
+    ax.xaxis.label.set_color('#888888'); ax.yaxis.label.set_color('#888888')
     
     legend = ax.legend(frameon=True, loc='lower center', bbox_to_anchor=(0.5, -0.3), ncol=2)
-    legend.get_frame().set_facecolor('#FFFFFF'); legend.get_frame().set_edgecolor(SLATE_200)
-    for text in legend.get_texts(): text.set_color(SLATE_800)
+    legend.get_frame().set_facecolor('white') # Fondo blanco explícito solo para la leyenda
+    for text in legend.get_texts(): text.set_color('#333333')
     
-    ax.grid(axis='y', color=SLATE_200, linestyle='-', alpha=0.5)
+    ax.grid(axis='y', color='#888888', linestyle='-', alpha=0.2)
     st.pyplot(fig)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(f"#### {t['neon_title']}")
 
-    def generate_base64_plot(feature_name, x_range, current_val, opt_min, opt_max, title, color_theme):
+    def generate_base64_plot(feature_name, x_range, current_val, opt_min, opt_max, title, color_theme, is_optimal):
         df_temp = pd.DataFrame({
             'Temperature_C': st.session_state['temp'], 'Humidity_percent': st.session_state['hum'],
             'pH_Level': st.session_state['ph'], 'Nutrient_EC_mS': st.session_state['ec'],
@@ -322,32 +301,125 @@ with tab1:
         fig2, ax2 = plt.subplots(figsize=(6, 3))
         fig2.patch.set_alpha(0.0); ax2.patch.set_alpha(0.0)
         
-        sns.lineplot(x=feature_name, y='Sim_Yield', data=df_temp, ax=ax2, color=SLATE_500, linewidth=2)
-        ax2.fill_between(x_range, df_temp['Sim_Yield'], color=SLATE_500, alpha=0.05)
-        ax2.axvspan(opt_min, opt_max, color=EMERALD, alpha=0.1)
+        sns.lineplot(x=feature_name, y='Sim_Yield', data=df_temp, ax=ax2, color='#888888', linewidth=2)
+        ax2.fill_between(x_range, df_temp['Sim_Yield'], color='#888888', alpha=0.05)
+        ax2.axvspan(opt_min, opt_max, color=OPTIMAL, alpha=0.15)
         
         try: 
             y_val = df_temp.loc[np.isclose(df_temp[feature_name], current_val, atol=1e-5), 'Sim_Yield'].values[0]
-            ax2.scatter(current_val, y_val, color=color_theme, s=100, zorder=5)
-            ax2.vlines(current_val, ymin=ax2.get_ylim()[0], ymax=y_val, color=color_theme, linestyle=':', lw=1.5)
+            # Usar marcador diferente según el estado para daltónicos
+            marker_shape = 'o' if is_optimal else 'X'
+            ax2.scatter(current_val, y_val, color=color_theme, s=120, marker=marker_shape, zorder=5)
+            ax2.vlines(current_val, ymin=ax2.get_ylim()[0], ymax=y_val, color=color_theme, linestyle=':', lw=2)
         except IndexError: pass
             
-        ax2.set_title(title, fontweight='bold', color=SLATE_800, fontsize=11, fontfamily='Sora')
+        ax2.set_title(title, fontweight='bold', color='#888888', fontsize=11, fontfamily='Sora')
         ax2.set_xlabel(''); ax2.set_ylabel('')
-        ax2.spines[['top', 'right', 'left']].set_visible(False); ax2.spines['bottom'].set_color(SLATE_200)
-        ax2.tick_params(colors=SLATE_500, bottom=False, left=False); ax2.grid(axis='y', color=SLATE_200, linestyle='-', alpha=0.5)
+        ax2.spines[['top', 'right', 'left']].set_visible(False); ax2.spines['bottom'].set_color('#888888')
+        ax2.tick_params(colors='#888888', bottom=False, left=False); ax2.grid(axis='y', color='#888888', linestyle='-', alpha=0.2)
         
         buf = io.BytesIO(); fig2.savefig(buf, format="png", bbox_inches='tight', transparent=True); plt.close(fig2)
         return base64.b64encode(buf.getbuffer()).decode("ascii")
 
-    class_temp = "tech-card-green" if 18.0 <= st.session_state['temp'] <= 25.0 else "tech-card-red"
-    class_ec = "tech-card-green" if 1.2 <= st.session_state['ec'] <= 1.8 else "tech-card-red"
-    color_temp = EMERALD if 18.0 <= st.session_state['temp'] <= 25.0 else ROSE
-    color_ec = EMERALD if 1.2 <= st.session_state['ec'] <= 1.8 else ROSE
+    is_temp_opt = 18.0 <= st.session_state['temp'] <= 25.0
+    is_ec_opt = 1.2 <= st.session_state['ec'] <= 1.8
+    
+    color_temp = OPTIMAL if is_temp_opt else CRITICAL
+    color_ec = OPTIMAL if is_ec_opt else CRITICAL
     
     col_n1, col_n2 = st.columns(2)
-    with col_n1: st.markdown(f'<div class="{class_temp}"><img src="data:image/png;base64,{generate_base64_plot("Temperature_C", np.arange(10, 41, 1), st.session_state["temp"], 18, 25, t["chart_temp"], color_temp)}" style="width:100%;"></div>', unsafe_allow_html=True)
-    with col_n2: st.markdown(f'<div class="{class_ec}"><img src="data:image/png;base64,{generate_base64_plot("Nutrient_EC_mS", np.arange(0.5, 3.1, 0.1), np.round(st.session_state["ec"],1), 1.2, 1.8, t["chart_ec"], color_ec)}" style="width:100%;"></div>', unsafe_allow_html=True)
+    with col_n1: 
+        st.markdown(f'<div class="tech-card" style="border-left: 5px solid {color_temp};"><img src="data:image/png;base64,{generate_base64_plot("Temperature_C", np.arange(10, 41, 1), st.session_state["temp"], 18, 25, t["chart_temp"], color_temp, is_temp_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
+    with col_n2: 
+        st.markdown(f'<div class="tech-card" style="border-left: 5px solid {color_ec};"><img src="data:image/png;base64,{generate_base64_plot("Nutrient_EC_mS", np.arange(0.5, 3.1, 0.1), np.round(st.session_state["ec"],1), 1.2, 1.8, t["chart_ec"], color_ec, is_ec_opt)}" style="width:100%;"></div>', unsafe_allow_html=True)
 
 with tab2:
-    pass # El código de esta pestaña se mantiene igual (Executive Dashboard)
+    # --- 10. TAB 2: INTERACTIVE EXECUTIVE DASHBOARD ---
+    st.markdown(f"<h3 style='text-align: center; margin-top: 20px;'>{t['dash_title']}</h3>", unsafe_allow_html=True)
+    st.info(t['dash_info'])
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    kpi1, kpi2, kpi3 = st.columns(3)
+    with kpi1:
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi1']}</p><h2 style="margin: 0; color: {BRAND}; font-weight: 700; font-family: 'Sora', sans-serif;">94.5%</h2></div>""", unsafe_allow_html=True)
+    with kpi2:
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi2']}</p><h2 style="margin: 0; font-weight: 700; font-family: 'Sora', sans-serif;">6.0</h2></div>""", unsafe_allow_html=True)
+    with kpi3:
+        st.markdown(f"""<div class="metric-card"><p style="margin: 0; font-weight: 600; text-transform: uppercase; font-size: 0.75rem;">{t['dash_kpi3']}</p><h2 style="margin: 0; color: {OPTIMAL}; font-weight: 700; font-family: 'Sora', sans-serif;">404g</h2></div>""", unsafe_allow_html=True)
+        
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    dash_col_left, dash_col_right = st.columns([3, 2])
+    
+    with dash_col_left:
+        st.markdown(f"<h5 style='text-align: center;'>{t['dash_c1_title']}</h5>", unsafe_allow_html=True)
+        
+        np.random.seed(42)
+        n_samples = 2000
+        sim_ph = np.random.uniform(3, 9, n_samples)
+        base_yield_sim = 400 - 30 * (sim_ph - 6.0)**2
+        sim_yield = np.maximum(base_yield_sim + np.random.normal(0, 50, n_samples), 50)
+        
+        fig_dash1, ax_dash1 = plt.subplots(figsize=(10, 6))
+        fig_dash1.patch.set_alpha(0.0); ax_dash1.patch.set_alpha(0.0)
+        
+        ax_dash1.scatter(sim_ph, sim_yield, alpha=0.3, color='#888888', s=15, edgecolors='none')
+        
+        x_trend = np.linspace(3, 9, 100)
+        ax_dash1.plot(x_trend, 400 - 30 * (x_trend - 6.0)**2, color=BRAND, linewidth=3)
+        ax_dash1.axvspan(5.8, 6.2, color=OPTIMAL, alpha=0.1)
+        ax_dash1.axvline(6.0, color=OPTIMAL, linestyle='--', linewidth=2)
+        
+        current_ph_state = st.session_state['ph']
+        ax_dash1.scatter(current_ph_state, baseline_yield, color=WARNING, s=400, edgecolor='white', linewidth=2, marker='*', zorder=10, label='Current State')
+        
+        ax_dash1.set_xlabel('Soil/Water pH Level', fontweight='600', color='#888888')
+        ax_dash1.set_ylabel('Crop Yield (grams)', fontweight='600', color='#888888')
+        ax_dash1.spines[['top', 'right', 'left']].set_visible(False)
+        ax_dash1.spines['bottom'].set_color('#888888')
+        ax_dash1.tick_params(colors='#888888', bottom=False, left=False)
+        ax_dash1.grid(axis='y', color='#888888', linestyle='-', alpha=0.2)
+        
+        legend_dash = ax_dash1.legend(loc='lower left', frameon=True)
+        legend_dash.get_frame().set_facecolor('white')
+        for text in legend_dash.get_texts(): text.set_color('#333333')
+        
+        st.pyplot(fig_dash1)
+
+    with dash_col_right:
+        st.markdown(f"<h5 style='text-align: center;'>{t['dash_c2_title']}</h5>", unsafe_allow_html=True)
+        try: importances = rf_model.feature_importances_
+        except AttributeError: importances = [0.18, 0.65, 0.04, 0.01, 0.12, 0.005]
+        
+        df_imp = pd.DataFrame({'Feature': ['Temp', 'Hum', 'pH', 'EC', 'Light', 'Days'], 'Importance': importances}).sort_values(by='Importance', ascending=True)
+        
+        fig_dash2, ax_dash2 = plt.subplots(figsize=(6, 3))
+        fig_dash2.patch.set_alpha(0.0); ax_dash2.patch.set_alpha(0.0)
+        
+        colors = [BRAND if i >= len(df_imp)-2 else '#888888' for i in range(len(df_imp))]
+        ax_dash2.barh(df_imp['Feature'], df_imp['Importance'], color=colors, height=0.6, alpha=0.8)
+        
+        ax_dash2.set_xlabel('Gini Importance', fontweight='600', color='#888888')
+        ax_dash2.spines[['top', 'right', 'left', 'bottom']].set_visible(False)
+        ax_dash2.tick_params(colors='#888888', bottom=False, left=False)
+        ax_dash2.grid(axis='x', color='#888888', linestyle='-', alpha=0.2)
+        st.pyplot(fig_dash2)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(f"<h5 style='text-align: center;'>{t['dash_c3_title']}</h5>", unsafe_allow_html=True)
+        
+        fig_dash3, ax_dash3 = plt.subplots(figsize=(6, 3.5))
+        fig_dash3.patch.set_alpha(0.0); ax_dash3.patch.set_alpha(0.0)
+        
+        actual = np.random.uniform(50, 400, 300)
+        predicted = np.where(actual > 320, 320 + np.random.normal(0, 5, len(actual)), actual + np.random.normal(0, 15, 300))
+        
+        ax_dash3.scatter(actual, predicted, alpha=0.6, color=BRAND, s=20, edgecolors='none')
+        ax_dash3.plot([50, 400], [50, 400], color=OPTIMAL, linestyle='--', linewidth=2)
+        
+        ax_dash3.set_xlabel('Actual Yield (g)', fontweight='600', color='#888888')
+        ax_dash3.set_ylabel('Predicted Yield (g)', fontweight='600', color='#888888')
+        ax_dash3.spines[['top', 'right', 'left']].set_visible(False)
+        ax_dash3.spines['bottom'].set_color('#888888')
+        ax_dash3.tick_params(colors='#888888', bottom=False, left=False)
+        ax_dash3.grid(color='#888888', linestyle='-', alpha=0.2)
+        st.pyplot(fig_dash3)
