@@ -236,12 +236,12 @@ This project is a working example of how **S-Labs** approaches decision intellig
 
 ```mermaid
 flowchart LR
-    A["Telemetría IoT<br/>4,900 registros"] --> B["Gobernanza de datos<br/>IQR · MNAR · imputación KNN"]
+    A["IoT telemetry<br/>4,900 records"] --> B["Data governance<br/>IQR · MNAR · KNN imputation"]
     B --> C["Random Forest<br/>R² = 94.5%"]
-    C --> D["SHAP<br/>qué mueve el rendimiento"]
-    C --> E["Motor de optimización<br/>argmax sobre palancas controlables"]
-    E --> F["Prescripción<br/>consignas de pH · EC"]
-    F --> G["Impacto de negocio<br/>USD por ciclo / año"]
+    C --> D["SHAP<br/>what drives yield"]
+    C --> E["Optimization engine<br/>argmax over controllable levers"]
+    E --> F["Prescription<br/>pH · EC setpoints"]
+    F --> G["Business impact<br/>USD per cycle / year"]
 ```
 
 ---
